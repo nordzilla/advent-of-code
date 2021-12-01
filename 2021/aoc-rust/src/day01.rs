@@ -1,17 +1,16 @@
 use aoc_runner_derive::*;
 
-use num::Num;
-use itertools::Itertools;
-
-type InputPart1 = String;
+type InputPart1 = Vec<usize>;
 type InputPart2 = InputPart1;
-
-type OutputPart1 = InputPart1;
+type OutputPart1 = usize;
 type OutputPart2 = OutputPart1;
 
 #[aoc_generator(day1, part1)]
 pub fn input_generator_part1(raw_input: &str) -> InputPart1 {
-    raw_input.into()
+    raw_input
+        .lines()
+        .map(|line| line.parse().unwrap())
+        .collect()
 }
 
 #[aoc_generator(day1, part2)]
@@ -21,10 +20,23 @@ pub fn input_generator_part2(raw_input: &str) -> InputPart2 {
 
 #[aoc(day1, part1)]
 pub fn solve_part1(input: &InputPart1) -> OutputPart1 {
-    OutputPart1::default()
+    input
+        .iter()
+        .zip(&input[1..])
+        .filter(|(lhs, rhs)| lhs < rhs)
+        .count()
 }
 
 #[aoc(day1, part2)]
 pub fn solve_part2(input: &InputPart2) -> OutputPart2 {
-    OutputPart2::default()
+    input
+        .windows(3)
+        .map(|window| window.iter().sum::<usize>())
+        .zip(
+            input[1..]
+                .windows(3)
+                .map(|window| window.iter().sum::<usize>()),
+        )
+        .filter(|(lhs, rhs)| lhs < rhs)
+        .count()
 }
