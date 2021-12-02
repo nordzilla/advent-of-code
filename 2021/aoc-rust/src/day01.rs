@@ -8,7 +8,7 @@ type Output = usize;
 // ========================================
 
 #[aoc_generator(day1, part1, Original)]
-pub fn input_generator_part1(raw_input: &str) -> Input {
+fn input_generator_part1(raw_input: &str) -> Input {
     raw_input
         .lines()
         .map(|line| line.parse().unwrap())
@@ -16,7 +16,7 @@ pub fn input_generator_part1(raw_input: &str) -> Input {
 }
 
 #[aoc_generator(day1, part2, Original)]
-pub fn input_generator_part2(raw_input: &str) -> Input {
+fn input_generator_part2(raw_input: &str) -> Input {
     input_generator_part1(raw_input)
         .windows(3)
         .map(|window| window.iter().sum())
@@ -24,7 +24,7 @@ pub fn input_generator_part2(raw_input: &str) -> Input {
 }
 
 #[aoc(day1, part1, Original)]
-pub fn solve_part1(input: &Input) -> Output {
+fn solve_part1(input: &Input) -> Output {
     input
         .iter()
         .zip(&input[1..])
@@ -33,7 +33,7 @@ pub fn solve_part1(input: &Input) -> Output {
 }
 
 #[aoc(day1, part2, Original)]
-pub fn solve_part2(input: &Input) -> Output {
+fn solve_part2(input: &Input) -> Output {
     solve_part1(input)
 }
 
@@ -46,7 +46,7 @@ pub fn solve_part2(input: &Input) -> Output {
 // last number.
 
 #[aoc_generator(day1, Clever)]
-pub fn input_generator_clever(raw_input: &str) -> Input {
+fn input_generator_clever(raw_input: &str) -> Input {
     input_generator_part1(raw_input)
 }
 
@@ -58,11 +58,11 @@ fn solve(input: &Input, window_size: usize) -> Output {
 }
 
 #[aoc(day1, part1, Clever)]
-pub fn solve_part1_clever(input: &Input) -> Output {
+fn solve_part1_clever(input: &Input) -> Output {
     solve(input, 2)
 }
 
 #[aoc(day1, part2, Clever)]
-pub fn solve_part2_clever(input: &Input) -> Output {
+fn solve_part2_clever(input: &Input) -> Output {
     solve(input, 4)
 }

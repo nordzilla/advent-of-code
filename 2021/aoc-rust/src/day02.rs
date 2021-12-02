@@ -45,25 +45,41 @@ struct Submarine {
 }
 
 impl Submarine {
-    fn go(mut self, instruction: Instruction) -> Self {
-        match instruction {
-            Instruction::Up(n) => self.depth -= n,
-            Instruction::Down(n) => self.depth += n,
-            Instruction::Forward(n) => self.horizontal += n,
+    fn move_horizontal_by(self, n: i64) -> Self {
+        Self {
+            horizontal: self.horizontal + n,
+            ..self
         }
-        self
     }
 
-    fn go_with_aim(mut self, instruction: Instruction) -> Self {
-        match instruction {
-            Instruction::Up(n) => self.aim -= n,
-            Instruction::Down(n) => self.aim += n,
-            Instruction::Forward(n) => {
-                self.horizontal += n;
-                self.depth += self.aim * n;
-            }
+    fn move_vertical_by(self, n: i64) -> Self {
+        Self {
+            depth: self.depth + n,
+            ..self
         }
-        self
+    }
+
+    fn adjust_aim_by(self, n: i64) -> Self {
+        Self {
+            aim: self.aim + n,
+            ..self
+        }
+    }
+
+    fn go(self, instruction: Instruction) -> Self {
+        match instruction {
+            Instruction::Up(n) => self.move_vertical_by(-n),
+            Instruction::Down(n) => self.move_vertical_by(n),
+            Instruction::Forward(n) => self.move_horizontal_by(n),
+        }
+    }
+
+    fn go_with_aim(self, instruction: Instruction) -> Self {
+        match instruction {
+            Instruction::Up(n) => self.adjust_aim_by(-n),
+            Instruction::Down(n) => self.adjust_aim_by(n),
+            Instruction::Forward(n) => self.move_horizontal_by(n).move_vertical_by(self.aim * n),
+        }
     }
 }
 
