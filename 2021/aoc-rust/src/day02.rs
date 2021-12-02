@@ -45,40 +45,34 @@ struct Submarine {
 }
 
 impl Submarine {
-    fn move_horizontal_by(self, n: i64) -> Self {
-        Self {
-            horizontal: self.horizontal + n,
-            ..self
-        }
+    fn moved_deeper_by(mut self, n: i64) -> Self {
+        self.depth += n;
+        self
     }
 
-    fn move_vertical_by(self, n: i64) -> Self {
-        Self {
-            depth: self.depth + n,
-            ..self
-        }
+    fn moved_forward_by(mut self, n: i64) -> Self {
+        self.horizontal += n;
+        self
     }
 
-    fn adjust_aim_by(self, n: i64) -> Self {
-        Self {
-            aim: self.aim + n,
-            ..self
-        }
+    fn with_aim_adjusted_by(mut self, n: i64) -> Self {
+        self.aim += n;
+        self
     }
 
     fn go(self, instruction: Instruction) -> Self {
         match instruction {
-            Instruction::Up(n) => self.move_vertical_by(-n),
-            Instruction::Down(n) => self.move_vertical_by(n),
-            Instruction::Forward(n) => self.move_horizontal_by(n),
+            Instruction::Up(n) => self.moved_deeper_by(-n),
+            Instruction::Down(n) => self.moved_deeper_by(n),
+            Instruction::Forward(n) => self.moved_forward_by(n),
         }
     }
 
     fn go_with_aim(self, instruction: Instruction) -> Self {
         match instruction {
-            Instruction::Up(n) => self.adjust_aim_by(-n),
-            Instruction::Down(n) => self.adjust_aim_by(n),
-            Instruction::Forward(n) => self.move_horizontal_by(n).move_vertical_by(self.aim * n),
+            Instruction::Up(n) => self.with_aim_adjusted_by(-n),
+            Instruction::Down(n) => self.with_aim_adjusted_by(n),
+            Instruction::Forward(n) => self.moved_forward_by(n).moved_deeper_by(self.aim * n),
         }
     }
 }
