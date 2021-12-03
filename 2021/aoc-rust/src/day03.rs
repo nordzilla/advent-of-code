@@ -11,17 +11,19 @@ fn input_generator(raw_input: &str) -> Input {
         .collect()
 }
 
-fn has_more_zeros(input: &Input, on_bit: i64) -> bool {
+fn has_more_zeros_at(on_bit: i64, input: &Input) -> bool {
     input.iter().filter(|&&n| 0 == n & on_bit).count() > input.len() / 2
+}
+
+fn on_bits_iter() -> impl Iterator<Item = i64> {
+    (0..12).rev().map(|place_value| 1 << place_value)
 }
 
 #[aoc(day3, part1)]
 fn solve_part1(input: &Input) -> Output {
-    let (gamma_rate, epsilon_rate) = (0..12)
-        .rev()
-        .map(|order| {
-            let on_bit = 1 << order;
-            has_more_zeros(input, on_bit)
+    let (gamma_rate, epsilon_rate) = on_bits_iter()
+        .map(|on_bit| {
+            has_more_zeros_at(on_bit, input)
                 .then(|| (0, on_bit))
                 .unwrap_or((on_bit, 0))
         })
@@ -41,20 +43,20 @@ enum Preference {
 
 fn find_rating(input: &Input, preference: Preference) -> i64 {
     let mut ratings = input.clone();
-    let retain_ones = |ratings: &mut Input, on_bit| ratings.retain(|n| 0 != n & on_bit);
-    let retain_zeros = |ratings: &mut Input, on_bit| ratings.retain(|n| 0 == n & on_bit);
+    let retain_ones_at = |on_bit, ratings: &mut Input| ratings.retain(|n| 0 != n & on_bit);
+    let retain_zeros_at = |on_bit, ratings: &mut Input| ratings.retain(|n| 0 == n & on_bit);
 
-    for on_bit in (0..12).rev().map(|order| 1 << order) {
+    for on_bit in on_bits_iter() {
         if ratings.len() == 1 {
             break;
         }
         match preference {
-            Preference::Majority => has_more_zeros(&ratings, on_bit)
-                .then(|| retain_zeros(&mut ratings, on_bit))
-                .unwrap_or_else(|| retain_ones(&mut ratings, on_bit)),
-            Preference::Minority => has_more_zeros(&ratings, on_bit)
-                .then(|| retain_ones(&mut ratings, on_bit))
-                .unwrap_or_else(|| retain_zeros(&mut ratings, on_bit)),
+            Preference::Majority => has_more_zeros_at(on_bit, &ratings)
+                .then(|| retain_zeros_at(on_bit, &mut ratings))
+                .unwrap_or_else(|| retain_ones_at(on_bit, &mut ratings)),
+            Preference::Minority => has_more_zeros_at(on_bit, &ratings)
+                .then(|| retain_ones_at(on_bit, &mut ratings))
+                .unwrap_or_else(|| retain_zeros_at(on_bit, &mut ratings)),
         }
     }
 
