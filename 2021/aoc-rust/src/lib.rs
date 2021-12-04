@@ -1,3 +1,5 @@
+#![feature(drain_filter)]
+
 use aoc_runner_derive::aoc_lib;
 
 pub mod day01;

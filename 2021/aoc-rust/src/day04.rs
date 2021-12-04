@@ -41,10 +41,11 @@ impl From<Vec<Vec<Squre>>> for BingoBoard {
 }
 
 impl BingoBoard {
-    fn mark(&mut self, n: i64) {
+    fn marked_with(&mut self, n: i64) -> &mut Self {
         self.board
             .iter_mut()
-            .for_each(|row| row.iter_mut().for_each(|square| square.mark_if_matches(n)))
+            .for_each(|row| row.iter_mut().for_each(|square| square.mark_if_matches(n)));
+        self
     }
 
     fn is_winner(&self) -> bool {
@@ -81,7 +82,6 @@ fn input_generator(raw_input: &str) -> Input {
                     line.split_whitespace()
                         .map(|n| n.parse::<i64>().unwrap().into())
                         .collect::<Vec<_>>()
-                        .into()
                 })
                 .collect::<Vec<_>>()
                 .into()
@@ -90,36 +90,31 @@ fn input_generator(raw_input: &str) -> Input {
     (calls, boards)
 }
 
-#[aoc(day4, part1)]
-fn solve_part1((calls, boards): &Input) -> Output {
+fn play_bingo((calls, boards): &Input) -> Vec<(i64, BingoBoard)> {
     let mut boards = boards.clone();
-    let mut first_winning_call = 0;
-    let mut first_winning_board = BingoBoard::default();
-    for &n in calls {
-        boards.iter_mut().for_each(|board| board.mark(n));
-        if let Some(winner) = boards.iter().find(|board| board.is_winner()) {
-            first_winning_call = n;
-            first_winning_board = winner.clone();
-            break;
-        }
-    }
-    first_winning_board.sum_unmarked_squares() * first_winning_call
+    let mut winners = Vec::with_capacity(boards.len());
+    calls.iter().for_each(|&n| {
+        winners.extend(
+            boards
+                .drain_filter(|board| board.marked_with(n).is_winner())
+                .map(|board| (n, board)),
+        );
+    });
+    winners
+}
+
+#[aoc(day4, part1)]
+fn solve_part1(input: &Input) -> Output {
+    play_bingo(input)
+        .first()
+        .map(|(winning_call, board)| winning_call * board.sum_unmarked_squares())
+        .unwrap()
 }
 
 #[aoc(day4, part2)]
-fn solve_part2((calls, boards): &Input) -> Output {
-    let mut boards = boards.clone();
-    let mut final_winning_call = 0;
-    let mut final_winning_board = BingoBoard::default();
-    calls.iter().for_each(|&n| {
-        boards.iter_mut().for_each(|board| {
-            board.mark(n);
-            board.is_winner().then(|| {
-                final_winning_call = n;
-                final_winning_board = board.clone();
-            });
-        });
-        boards.retain(|board| !board.is_winner());
-    });
-    final_winning_board.sum_unmarked_squares() * final_winning_call
+fn solve_part2(input: &Input) -> Output {
+    play_bingo(input)
+        .last()
+        .map(|(winning_call, board)| winning_call * board.sum_unmarked_squares())
+        .unwrap()
 }
