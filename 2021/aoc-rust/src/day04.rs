@@ -5,12 +5,12 @@ type Input = (Vec<i64>, Vec<BingoBoard>);
 type Output = i64;
 
 #[derive(Debug, Clone, Copy)]
-struct Squre {
+struct Square {
     value: i64,
     is_marked: bool,
 }
 
-impl From<i64> for Squre {
+impl From<i64> for Square {
     fn from(value: i64) -> Self {
         Self {
             value,
@@ -19,7 +19,7 @@ impl From<i64> for Squre {
     }
 }
 
-impl Squre {
+impl Square {
     fn mark_if_matches(&mut self, n: i64) {
         self.value.eq(&n).then(|| self.is_marked = true);
     }
@@ -31,11 +31,11 @@ impl Squre {
 
 #[derive(Debug, Default, Clone)]
 struct BingoBoard {
-    board: Vec<Vec<Squre>>,
+    board: Vec<Vec<Square>>,
 }
 
-impl From<Vec<Vec<Squre>>> for BingoBoard {
-    fn from(board: Vec<Vec<Squre>>) -> Self {
+impl From<Vec<Vec<Square>>> for BingoBoard {
+    fn from(board: Vec<Vec<Square>>) -> Self {
         Self { board }
     }
 }
@@ -58,7 +58,7 @@ impl BingoBoard {
     fn sum_unmarked_squares(&self) -> i64 {
         self.board
             .iter()
-            .flat_map(|row| row.iter().filter_map(|square| square.unmarked_value()))
+            .flat_map(|row| row.iter().filter_map(Square::unmarked_value))
             .sum()
     }
 }
