@@ -1,4 +1,5 @@
 use aoc_runner_derive::*;
+use flow_control::break_if;
 
 type Input = Vec<i64>;
 type Output = i64;
@@ -47,9 +48,7 @@ fn find_rating(input: &Input, preference: Preference) -> i64 {
     let retain_zeros_at = |on_bit, ratings: &mut Input| ratings.retain(|n| 0 == n & on_bit);
 
     for on_bit in on_bits_iter() {
-        if ratings.len() == 1 {
-            break;
-        }
+        break_if!(ratings.len() == 1);
         match preference {
             Preference::Majority => has_more_zeros_at(on_bit, &ratings)
                 .then(|| retain_zeros_at(on_bit, &mut ratings))

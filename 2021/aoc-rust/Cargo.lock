@@ -46,6 +46,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-runner",
  "aoc-runner-derive",
+ "flow-control",
  "itertools",
  "num",
  "regex",
@@ -63,6 +64,12 @@ name = "either"
 version = "1.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
+
+[[package]]
+name = "flow-control"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1c32e648ac4cb95befab7bd5611beedd6a9698b171080932f64c4eefaabf7eff"
 
 [[package]]
 name = "itertools"
