@@ -1,11 +1,12 @@
 use aoc_runner_derive::*;
+
+use text_io::scan;
 use itertools::Itertools;
-use std::{cmp::Ordering::*, iter};
+use std::{cmp::Ordering, iter};
 
 type Input = Vec<Line>;
 type Output = usize;
 
-#[derive(Copy, Clone)]
 struct Line {
     x1: i16,
     y1: i16,
@@ -13,36 +14,9 @@ struct Line {
     y2: i16,
 }
 
-impl From<((i16, i16), (i16, i16))> for Line {
-    fn from(((x1, y1), (x2, y2)): ((i16, i16), (i16, i16))) -> Self {
+impl From<[i16; 4]> for Line {
+    fn from([x1, y1, x2, y2]: [i16; 4]) -> Self {
         Self { x1, y1, x2, y2 }
-    }
-}
-
-impl Line {
-    fn is_horizontal(self) -> bool {
-        self.y1 == self.y2
-    }
-
-    fn is_vertical(self) -> bool {
-        self.x1 == self.x2
-    }
-
-    #[rustfmt::skip]
-    fn points(self) -> impl Iterator<Item = (i16, i16)> {
-        iter::successors(Some((self.x1, self.y1)), move |&(x, y)| {
-            match (self.x2.cmp(&x), self.y2.cmp(&y)) {
-                (Equal,   Equal)   => None,
-                (Equal,   Less)    => Some((x + 0, y - 1)),
-                (Equal,   Greater) => Some((x + 0, y + 1)),
-                (Less,    Equal)   => Some((x - 1, y + 0)),
-                (Less,    Less)    => Some((x - 1, y - 1)),
-                (Less,    Greater) => Some((x - 1, y + 1)),
-                (Greater, Equal)   => Some((x + 1, y + 0)),
-                (Greater, Less)    => Some((x + 1, y - 1)),
-                (Greater, Greater) => Some((x + 1, y + 1)),
-            }
-        })
     }
 }
 
@@ -51,43 +25,56 @@ fn input_generator(raw_input: &str) -> Input {
     raw_input
         .lines()
         .map(|line| {
-            let mut split = line.split(" -> ");
-            let mut start_point = split
-                .next()
-                .unwrap()
-                .split(',')
-                .map(|n| n.parse::<i16>().unwrap());
-            let mut end_point = split
-                .next()
-                .unwrap()
-                .split(',')
-                .map(|n| n.parse::<i16>().unwrap());
-            (
-                (start_point.next().unwrap(), start_point.next().unwrap()),
-                (end_point.next().unwrap(), end_point.next().unwrap()),
-            )
-                .into()
+            let [x1, y1, x2, y2]: [i16; 4];
+            scan!(line.bytes() => "{},{} -> {},{}", x1, y1, x2, y2);
+            [x1, y1, x2, y2].into()
         })
-        .collect::<Vec<_>>()
+        .collect()
 }
 
-fn count_overlapping(input: &Input, predicate: impl FnMut(&&Line) -> bool) -> Output {
+trait Approach {
+    fn approach(self, target: Self) -> Self;
+}
+
+impl Approach for i16 {
+    fn approach(self, target: Self) -> Self {
+        match target.cmp(&self) {
+            Ordering::Less => self - 1,
+            Ordering::Equal => self,
+            Ordering::Greater => self + 1,
+        }
+    }
+}
+
+impl Line {
+    fn is_not_diagonal(&self) -> bool {
+        self.x1 == self.x2 || self.y1 == self.y2
+    }
+
+    fn points(&Self { x1, y1, x2, y2 }: &Self) -> impl Iterator<Item = (i16, i16)> + '_ {
+        iter::successors(Some((x1, y1)), move |&(x, y)| {
+            (x != x2 || y != y2).then(|| (x.approach(x2), y.approach(y2)))
+        })
+    }
+}
+
+fn count_intersections(input: &Input, predicate: impl FnMut(&&Line) -> bool) -> Output {
     input
         .iter()
         .filter(predicate)
-        .flat_map(|line| line.points())
-        .into_group_map_by(|&point| point)
+        .flat_map(Line::points)
+        .counts()
         .values()
-        .filter(|group| group.len() > 1)
+        .filter(|&&count| count > 1)
         .count()
 }
 
 #[aoc(day5, part1)]
 fn solve_part1(input: &Input) -> Output {
-    count_overlapping(input, |line| line.is_vertical() || line.is_horizontal())
+    count_intersections(input, |line| line.is_not_diagonal())
 }
 
 #[aoc(day5, part2)]
 fn solve_part2(input: &Input) -> Output {
-    count_overlapping(input, |_| true)
+    count_intersections(input, |_| true)
 }
