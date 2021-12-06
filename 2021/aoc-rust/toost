@@ -1,0 +1,6 @@
+Day6 - Part2/MapCache     time:   [ 11.26 us  11.27 us  11.28 us]                                   
+Day6 - Part2/VecRotation  time:   [  1.24 us   1.25 us   1.25 us]
+Day6 - Part2/ArrayCache   time:   [982.93 ns 983.44 ns 984.04 ns]                                     
+Day6 - Part2/ArrayModulus time:   [192.72 ns 192.74 ns 192.77 ns]
+Day6 - Part2/ArraysIter   time:   [ 33.04 ns  33.20 ns  33.41 ns]                                     
+
