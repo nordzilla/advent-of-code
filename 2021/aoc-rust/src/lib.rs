@@ -1,4 +1,5 @@
 #![feature(drain_filter)]
+#![recursion_limit = "512"]
 
 use aoc_runner_derive::aoc_lib;
 
