@@ -1,8 +1,8 @@
 use aoc_runner_derive::*;
 
-use text_io::scan;
 use itertools::Itertools;
 use std::{cmp::Ordering, iter};
+use text_io::scan;
 
 type Input = Vec<Line>;
 type Output = usize;
