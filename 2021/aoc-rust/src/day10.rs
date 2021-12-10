@@ -13,10 +13,6 @@ fn input_generator(raw_input: &str) -> Input {
         .collect()
 }
 
-fn is_opening(byte: u8) -> bool {
-    matches!(byte, b'(' | b'[' | b'{' | b'<')
-}
-
 fn get_match(byte: u8) -> u8 {
     match byte {
         b'(' => b')',
@@ -29,6 +25,10 @@ fn get_match(byte: u8) -> u8 {
 
 fn is_matching_pair(lhs: u8, rhs: Option<u8>) -> bool {
     rhs.map(|byte| lhs == get_match(byte)).unwrap_or(false)
+}
+
+fn is_opening(byte: u8) -> bool {
+    matches!(byte, b'(' | b'[' | b'{' | b'<')
 }
 
 fn point_value_part1(byte: u8) -> usize {
@@ -69,16 +69,11 @@ fn parse(input: &[u8], mut stack: Vec<u8>) -> Result<Vec<u8>, u8> {
     }
 }
 
-fn eval(input: &Vec<u8>) -> Result<Vec<u8>, u8> {
-    let stack = Vec::with_capacity(input.len());
-    parse(input, stack)
-}
-
 #[aoc(day10, part1)]
 fn solve_part1(input: &Input) -> Output {
     input
         .iter()
-        .map(eval)
+        .map(|line| parse(line, Vec::new()))
         .filter(Result::is_err)
         .map(Result::unwrap_err)
         .map(point_value_part1)
@@ -89,7 +84,7 @@ fn solve_part1(input: &Input) -> Output {
 fn solve_part2(input: &Input) -> Output {
     let scores = input
         .iter()
-        .filter_map(|line| eval(line).ok())
+        .filter_map(|line| parse(line, Vec::new()).ok())
         .map(|stack| {
             stack
                 .into_iter()
