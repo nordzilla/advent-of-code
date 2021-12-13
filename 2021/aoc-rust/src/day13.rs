@@ -1,18 +1,15 @@
-#![allow(unused)]
-
 use aoc_runner_derive::*;
-use flow_control::return_if;
-use std::collections::{BTreeMap, BTreeSet};
+use std::cmp::Ordering;
 use text_io::scan;
 
-type Dots = BTreeSet<(i32, i32)>;
+type Dots = Vec<(i16, i16)>;
 type Input = (Dots, Vec<Fold>);
 type Output = usize;
 
 #[derive(Debug, Copy, Clone)]
 enum Fold {
-    Up(i32),
-    Left(i32),
+    Up(i16),
+    Left(i16),
 }
 
 #[aoc_generator(day13)]
@@ -23,7 +20,7 @@ fn input_generator(raw_input: &str) -> Input {
         .unwrap()
         .lines()
         .map(|line| {
-            let [x, y]: [i32; 2];
+            let [x, y]: [i16; 2];
             scan!(line.bytes() => "{},{}", x, y);
             (x, y)
         })
@@ -33,10 +30,10 @@ fn input_generator(raw_input: &str) -> Input {
         .unwrap()
         .lines()
         .map(|line| {
-            let direction: String;
-            let location: i32;
+            let direction: char;
+            let location: i16;
             scan!(line.bytes() => "fold along {}={}", direction, location);
-            if direction == "y" {
+            if direction == 'y' {
                 Fold::Up(location)
             } else {
                 Fold::Left(location)
@@ -46,42 +43,35 @@ fn input_generator(raw_input: &str) -> Input {
     (dots, folds)
 }
 
-fn fold(dots: Dots, instruction: Fold) -> Dots {
-    let (mut half1, mut half2): (Dots, Dots) = dots
-        .into_iter()
-        .filter(|&(x, y)| match instruction {
-            Fold::Up(location) => y != location,
-            Fold::Left(location) => x != location,
-        })
-        .partition(|&(x, y)| match instruction {
-            Fold::Up(location) => y < location,
-            Fold::Left(location) => x < location,
-        });
-
-    match instruction {
-        Fold::Up(location) => {
-            half2 = half2
-                .into_iter()
-                .map(|(x, y)| (x, y - 2 * (y - location)))
-                .collect();
-        }
-        Fold::Left(location) => {
-            half2 = half2
-                .into_iter()
-                .map(|(x, y)| (x - 2 * (x - location), y))
-                .collect();
+impl Fold {
+    fn apply_to(self, (x, y): (i16, i16)) -> Option<(i16, i16)> {
+        match self {
+            Fold::Up(location) => match y.cmp(&location) {
+                Ordering::Equal => None,
+                Ordering::Less => Some((x, y)),
+                Ordering::Greater => Some((x, -y + 2 * location)),
+            },
+            Fold::Left(location) => match x.cmp(&location) {
+                Ordering::Equal => None,
+                Ordering::Less => Some((x, y)),
+                Ordering::Greater => Some((-x + 2 * location, y)),
+            },
         }
     }
-    half1.union(&half2).into_iter().copied().collect()
 }
 
+fn apply_folds(dots: Dots, fold: Fold) -> Dots {
+    dots.into_iter()
+        .flat_map(|dot| fold.apply_to(dot))
+        .collect()
+}
+
+#[allow(unused)]
 fn plot(dots: &Dots) {
     let min_x = dots.iter().min_by_key(|(x, _)| x).unwrap().0;
-    let min_y = dots.iter().min_by_key(|(_, y)| y).unwrap().1;
-
     let max_x = dots.iter().max_by_key(|(x, _)| x).unwrap().0;
+    let min_y = dots.iter().min_by_key(|(_, y)| y).unwrap().1;
     let max_y = dots.iter().max_by_key(|(_, y)| y).unwrap().1;
-
     for y in min_y..=max_y {
         for x in min_x..=max_x {
             if dots.contains(&(x, y)) {
@@ -98,17 +88,19 @@ fn plot(dots: &Dots) {
 fn solve_part1((dots, folds): &Input) -> Output {
     let mut dots = dots.clone();
     for &instruction in folds.iter().take(1) {
-        dots = fold(dots, instruction);
+        dots = apply_folds(dots, instruction);
     }
-    dots.into_iter().count()
+    dots.sort();
+    dots.dedup();
+    dots.len()
 }
 
 #[aoc(day13, part2)]
 fn solve_part2((dots, folds): &Input) -> Output {
     let mut dots = dots.clone();
     for &instruction in folds.iter() {
-        dots = fold(dots, instruction);
+        dots = apply_folds(dots, instruction);
     }
-    plot(&dots);
-    dots.into_iter().count()
+    //plot(&dots);
+    867_5309
 }
