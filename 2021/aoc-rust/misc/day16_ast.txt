@@ -1,0 +1,2243 @@
+Packet {
+    header: Header {
+        version: 3,
+        type_id: Sum,
+    },
+    value: 0,
+    sub_packets: [
+        Packet {
+            header: Header {
+                version: 6,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 1,
+                        type_id: Literal,
+                    },
+                    value: 18519,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: EqualTo,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 6,
+                                type_id: Literal,
+                            },
+                            value: 43,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 0,
+                                type_id: Literal,
+                            },
+                            value: 78927470,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 2,
+                type_id: Literal,
+            },
+            value: 2,
+            sub_packets: [],
+        },
+        Packet {
+            header: Header {
+                version: 7,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 1634,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: LessThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 3,
+                                type_id: Literal,
+                            },
+                            value: 52320,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 3,
+                                type_id: Literal,
+                            },
+                            value: 1923994496,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 3,
+                type_id: Maximum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Literal,
+                    },
+                    value: 10,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: Literal,
+                    },
+                    value: 107,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 7,
+                        type_id: Literal,
+                    },
+                    value: 210,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 9,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 0,
+                        type_id: Literal,
+                    },
+                    value: 48781326955,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Literal,
+            },
+            value: 13,
+            sub_packets: [],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Literal,
+            },
+            value: 226,
+            sub_packets: [],
+        },
+        Packet {
+            header: Header {
+                version: 5,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: GreaterThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 0,
+                                type_id: Literal,
+                            },
+                            value: 315663,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 6,
+                                type_id: Literal,
+                            },
+                            value: 15396305,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 100,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 7,
+                type_id: Literal,
+            },
+            value: 474569,
+            sub_packets: [],
+        },
+        Packet {
+            header: Header {
+                version: 4,
+                type_id: Sum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 1,
+                        type_id: Literal,
+                    },
+                    value: 68,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Literal,
+                    },
+                    value: 15,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: Literal,
+                    },
+                    value: 404636,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 5,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 1,
+                        type_id: LessThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 6,
+                                type_id: Literal,
+                            },
+                            value: 2819168,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 6,
+                                type_id: Literal,
+                            },
+                            value: 32479852,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 1953,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 5,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: Literal,
+                    },
+                    value: 191,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: Literal,
+                    },
+                    value: 55,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: Literal,
+                    },
+                    value: 212,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 4,
+                type_id: Sum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: Literal,
+                    },
+                    value: 1037,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 7,
+                type_id: Literal,
+            },
+            value: 2156,
+            sub_packets: [],
+        },
+        Packet {
+            header: Header {
+                version: 4,
+                type_id: Maximum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Literal,
+                    },
+                    value: 1505,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Literal,
+            },
+            value: 2381514313,
+            sub_packets: [],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: LessThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 3,
+                                type_id: Literal,
+                            },
+                            value: 344095,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 1,
+                                type_id: Literal,
+                            },
+                            value: 234578,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: Literal,
+                    },
+                    value: 3383,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 4,
+                type_id: Literal,
+            },
+            value: 11,
+            sub_packets: [],
+        },
+        Packet {
+            header: Header {
+                version: 5,
+                type_id: Sum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: Product,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 4,
+                                type_id: Literal,
+                            },
+                            value: 7,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 5,
+                                type_id: Literal,
+                            },
+                            value: 3,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 4,
+                                type_id: Literal,
+                            },
+                            value: 11,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Product,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 0,
+                                type_id: Literal,
+                            },
+                            value: 13,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 2,
+                                type_id: Literal,
+                            },
+                            value: 11,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 1,
+                                type_id: Literal,
+                            },
+                            value: 10,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Product,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 4,
+                                type_id: Literal,
+                            },
+                            value: 3,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 2,
+                                type_id: Literal,
+                            },
+                            value: 7,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 0,
+                                type_id: Literal,
+                            },
+                            value: 7,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 7,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 765,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: GreaterThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 2,
+                                type_id: Literal,
+                            },
+                            value: 7,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 3,
+                                type_id: Literal,
+                            },
+                            value: 4399446759194,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Literal,
+            },
+            value: 946,
+            sub_packets: [],
+        },
+        Packet {
+            header: Header {
+                version: 2,
+                type_id: Minimum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 252,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: LessThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 1,
+                                type_id: Literal,
+                            },
+                            value: 37028,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 0,
+                                type_id: Literal,
+                            },
+                            value: 37028,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 1,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 0,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: LessThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 3,
+                                type_id: Sum,
+                            },
+                            value: 0,
+                            sub_packets: [
+                                Packet {
+                                    header: Header {
+                                        version: 1,
+                                        type_id: Literal,
+                                    },
+                                    value: 11,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 0,
+                                        type_id: Literal,
+                                    },
+                                    value: 6,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 0,
+                                        type_id: Literal,
+                                    },
+                                    value: 4,
+                                    sub_packets: [],
+                                },
+                            ],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 3,
+                                type_id: Sum,
+                            },
+                            value: 0,
+                            sub_packets: [
+                                Packet {
+                                    header: Header {
+                                        version: 7,
+                                        type_id: Literal,
+                                    },
+                                    value: 15,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 0,
+                                        type_id: Literal,
+                                    },
+                                    value: 2,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 6,
+                                        type_id: Literal,
+                                    },
+                                    value: 11,
+                                    sub_packets: [],
+                                },
+                            ],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 0,
+                        type_id: Literal,
+                    },
+                    value: 378529,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 5,
+                type_id: Maximum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Maximum,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 5,
+                                type_id: Product,
+                            },
+                            value: 0,
+                            sub_packets: [
+                                Packet {
+                                    header: Header {
+                                        version: 1,
+                                        type_id: Product,
+                                    },
+                                    value: 0,
+                                    sub_packets: [
+                                        Packet {
+                                            header: Header {
+                                                version: 7,
+                                                type_id: Sum,
+                                            },
+                                            value: 0,
+                                            sub_packets: [
+                                                Packet {
+                                                    header: Header {
+                                                        version: 0,
+                                                        type_id: Sum,
+                                                    },
+                                                    value: 0,
+                                                    sub_packets: [
+                                                        Packet {
+                                                            header: Header {
+                                                                version: 4,
+                                                                type_id: Minimum,
+                                                            },
+                                                            value: 0,
+                                                            sub_packets: [
+                                                                Packet {
+                                                                    header: Header {
+                                                                        version: 3,
+                                                                        type_id: Maximum,
+                                                                    },
+                                                                    value: 0,
+                                                                    sub_packets: [
+                                                                        Packet {
+                                                                            header: Header {
+                                                                                version: 6,
+                                                                                type_id: Maximum,
+                                                                            },
+                                                                            value: 0,
+                                                                            sub_packets: [
+                                                                                Packet {
+                                                                                    header: Header {
+                                                                                        version: 4,
+                                                                                        type_id: Product,
+                                                                                    },
+                                                                                    value: 0,
+                                                                                    sub_packets: [
+                                                                                        Packet {
+                                                                                            header: Header {
+                                                                                                version: 1,
+                                                                                                type_id: Product,
+                                                                                            },
+                                                                                            value: 0,
+                                                                                            sub_packets: [
+                                                                                                Packet {
+                                                                                                    header: Header {
+                                                                                                        version: 1,
+                                                                                                        type_id: Minimum,
+                                                                                                    },
+                                                                                                    value: 0,
+                                                                                                    sub_packets: [
+                                                                                                        Packet {
+                                                                                                            header: Header {
+                                                                                                                version: 0,
+                                                                                                                type_id: Product,
+                                                                                                            },
+                                                                                                            value: 0,
+                                                                                                            sub_packets: [
+                                                                                                                Packet {
+                                                                                                                    header: Header {
+                                                                                                                        version: 4,
+                                                                                                                        type_id: Maximum,
+                                                                                                                    },
+                                                                                                                    value: 0,
+                                                                                                                    sub_packets: [
+                                                                                                                        Packet {
+                                                                                                                            header: Header {
+                                                                                                                                version: 5,
+                                                                                                                                type_id: Product,
+                                                                                                                            },
+                                                                                                                            value: 0,
+                                                                                                                            sub_packets: [
+                                                                                                                                Packet {
+                                                                                                                                    header: Header {
+                                                                                                                                        version: 0,
+                                                                                                                                        type_id: Maximum,
+                                                                                                                                    },
+                                                                                                                                    value: 0,
+                                                                                                                                    sub_packets: [
+                                                                                                                                        Packet {
+                                                                                                                                            header: Header {
+                                                                                                                                                version: 1,
+                                                                                                                                                type_id: Minimum,
+                                                                                                                                            },
+                                                                                                                                            value: 0,
+                                                                                                                                            sub_packets: [
+                                                                                                                                                Packet {
+                                                                                                                                                    header: Header {
+                                                                                                                                                        version: 2,
+                                                                                                                                                        type_id: Minimum,
+                                                                                                                                                    },
+                                                                                                                                                    value: 0,
+                                                                                                                                                    sub_packets: [
+                                                                                                                                                        Packet {
+                                                                                                                                                            header: Header {
+                                                                                                                                                                version: 3,
+                                                                                                                                                                type_id: Maximum,
+                                                                                                                                                            },
+                                                                                                                                                            value: 0,
+                                                                                                                                                            sub_packets: [
+                                                                                                                                                                Packet {
+                                                                                                                                                                    header: Header {
+                                                                                                                                                                        version: 1,
+                                                                                                                                                                        type_id: Sum,
+                                                                                                                                                                    },
+                                                                                                                                                                    value: 0,
+                                                                                                                                                                    sub_packets: [
+                                                                                                                                                                        Packet {
+                                                                                                                                                                            header: Header {
+                                                                                                                                                                                version: 0,
+                                                                                                                                                                                type_id: Literal,
+                                                                                                                                                                            },
+                                                                                                                                                                            value: 53272880723,
+                                                                                                                                                                            sub_packets: [],
+                                                                                                                                                                        },
+                                                                                                                                                                    ],
+                                                                                                                                                                },
+                                                                                                                                                            ],
+                                                                                                                                                        },
+                                                                                                                                                    ],
+                                                                                                                                                },
+                                                                                                                                            ],
+                                                                                                                                        },
+                                                                                                                                    ],
+                                                                                                                                },
+                                                                                                                            ],
+                                                                                                                        },
+                                                                                                                    ],
+                                                                                                                },
+                                                                                                            ],
+                                                                                                        },
+                                                                                                    ],
+                                                                                                },
+                                                                                            ],
+                                                                                        },
+                                                                                    ],
+                                                                                },
+                                                                            ],
+                                                                        },
+                                                                    ],
+                                                                },
+                                                            ],
+                                                        },
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 7,
+                type_id: Maximum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 206576,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Literal,
+                    },
+                    value: 2963,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 115,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 2,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: Literal,
+                    },
+                    value: 250,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: GreaterThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 0,
+                                type_id: Literal,
+                            },
+                            value: 1119,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 3,
+                                type_id: Literal,
+                            },
+                            value: 142,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Maximum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: Literal,
+                    },
+                    value: 113083,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 9388306,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 5,
+                type_id: Maximum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 55153,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 26407,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 5510634,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: Literal,
+                    },
+                    value: 39223780866,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Literal,
+            },
+            value: 1059,
+            sub_packets: [],
+        },
+        Packet {
+            header: Header {
+                version: 6,
+                type_id: Minimum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: Literal,
+                    },
+                    value: 205411,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 29452,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 0,
+                        type_id: Literal,
+                    },
+                    value: 49630,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: Literal,
+                    },
+                    value: 104,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 2,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 219,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 0,
+                        type_id: Literal,
+                    },
+                    value: 207,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 7,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 0,
+                        type_id: GreaterThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 0,
+                                type_id: Sum,
+                            },
+                            value: 0,
+                            sub_packets: [
+                                Packet {
+                                    header: Header {
+                                        version: 5,
+                                        type_id: Literal,
+                                    },
+                                    value: 2,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 0,
+                                        type_id: Literal,
+                                    },
+                                    value: 13,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 0,
+                                        type_id: Literal,
+                                    },
+                                    value: 9,
+                                    sub_packets: [],
+                                },
+                            ],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 6,
+                                type_id: Sum,
+                            },
+                            value: 0,
+                            sub_packets: [
+                                Packet {
+                                    header: Header {
+                                        version: 6,
+                                        type_id: Literal,
+                                    },
+                                    value: 8,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 2,
+                                        type_id: Literal,
+                                    },
+                                    value: 5,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 4,
+                                        type_id: Literal,
+                                    },
+                                    value: 11,
+                                    sub_packets: [],
+                                },
+                            ],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Literal,
+                    },
+                    value: 79,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 3,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: Literal,
+                    },
+                    value: 725,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: LessThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 2,
+                                type_id: Literal,
+                            },
+                            value: 483456898762,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 1,
+                                type_id: Literal,
+                            },
+                            value: 39179,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 7,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 106,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 81,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: Literal,
+                    },
+                    value: 68,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 7,
+                        type_id: Literal,
+                    },
+                    value: 173,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Sum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Literal,
+                    },
+                    value: 551,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 0,
+                        type_id: Literal,
+                    },
+                    value: 8976099,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: Literal,
+                    },
+                    value: 1003389,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: Literal,
+                    },
+                    value: 61934,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 1,
+                        type_id: Literal,
+                    },
+                    value: 2572,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 0,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 1,
+                        type_id: GreaterThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 1,
+                                type_id: Sum,
+                            },
+                            value: 0,
+                            sub_packets: [
+                                Packet {
+                                    header: Header {
+                                        version: 2,
+                                        type_id: Literal,
+                                    },
+                                    value: 4,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 2,
+                                        type_id: Literal,
+                                    },
+                                    value: 10,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 4,
+                                        type_id: Literal,
+                                    },
+                                    value: 13,
+                                    sub_packets: [],
+                                },
+                            ],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 4,
+                                type_id: Sum,
+                            },
+                            value: 0,
+                            sub_packets: [
+                                Packet {
+                                    header: Header {
+                                        version: 7,
+                                        type_id: Literal,
+                                    },
+                                    value: 7,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 6,
+                                        type_id: Literal,
+                                    },
+                                    value: 14,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 1,
+                                        type_id: Literal,
+                                    },
+                                    value: 14,
+                                    sub_packets: [],
+                                },
+                            ],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 7,
+                        type_id: Literal,
+                    },
+                    value: 136,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 7,
+                        type_id: Literal,
+                    },
+                    value: 15632,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: LessThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 3,
+                                type_id: Literal,
+                            },
+                            value: 148,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 4,
+                                type_id: Literal,
+                            },
+                            value: 148,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 7,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 7,
+                        type_id: EqualTo,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 2,
+                                type_id: Literal,
+                            },
+                            value: 20,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 2,
+                                type_id: Literal,
+                            },
+                            value: 20,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 0,
+                        type_id: Literal,
+                    },
+                    value: 44451124674,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 5,
+                type_id: Minimum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 1,
+                        type_id: Literal,
+                    },
+                    value: 134,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 6,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Literal,
+                    },
+                    value: 57,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 11554,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 701977,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 0,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Sum,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 4,
+                                type_id: Literal,
+                            },
+                            value: 4,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 7,
+                                type_id: Literal,
+                            },
+                            value: 2,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 5,
+                                type_id: Literal,
+                            },
+                            value: 15,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 7,
+                        type_id: Sum,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 0,
+                                type_id: Literal,
+                            },
+                            value: 7,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 7,
+                                type_id: Literal,
+                            },
+                            value: 6,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 6,
+                                type_id: Literal,
+                            },
+                            value: 2,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Sum,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 7,
+                                type_id: Literal,
+                            },
+                            value: 7,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 4,
+                                type_id: Literal,
+                            },
+                            value: 14,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 5,
+                                type_id: Literal,
+                            },
+                            value: 8,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 2,
+                type_id: Minimum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 0,
+                        type_id: Literal,
+                    },
+                    value: 56652,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 3,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Literal,
+            },
+            value: 214,
+            sub_packets: [],
+        },
+        Packet {
+            header: Header {
+                version: 4,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Literal,
+                    },
+                    value: 2355355762,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 7,
+                        type_id: GreaterThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 3,
+                                type_id: Literal,
+                            },
+                            value: 6033620,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 1,
+                                type_id: Literal,
+                            },
+                            value: 6033620,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Literal,
+                    },
+                    value: 231,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 0,
+                        type_id: EqualTo,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 4,
+                                type_id: Sum,
+                            },
+                            value: 0,
+                            sub_packets: [
+                                Packet {
+                                    header: Header {
+                                        version: 6,
+                                        type_id: Literal,
+                                    },
+                                    value: 2,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 4,
+                                        type_id: Literal,
+                                    },
+                                    value: 5,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 7,
+                                        type_id: Literal,
+                                    },
+                                    value: 8,
+                                    sub_packets: [],
+                                },
+                            ],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 0,
+                                type_id: Sum,
+                            },
+                            value: 0,
+                            sub_packets: [
+                                Packet {
+                                    header: Header {
+                                        version: 1,
+                                        type_id: Literal,
+                                    },
+                                    value: 14,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 5,
+                                        type_id: Literal,
+                                    },
+                                    value: 15,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 4,
+                                        type_id: Literal,
+                                    },
+                                    value: 13,
+                                    sub_packets: [],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 1,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: Literal,
+                    },
+                    value: 20,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 1,
+                        type_id: Literal,
+                    },
+                    value: 70,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 0,
+                        type_id: Literal,
+                    },
+                    value: 95,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 1,
+                        type_id: Literal,
+                    },
+                    value: 217,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Literal,
+                    },
+                    value: 183,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 7,
+                type_id: Minimum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 1,
+                        type_id: Literal,
+                    },
+                    value: 8,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 5,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 7,
+                        type_id: Literal,
+                    },
+                    value: 2128,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 7,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 3,
+                        type_id: Literal,
+                    },
+                    value: 49,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: LessThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 3,
+                                type_id: Sum,
+                            },
+                            value: 0,
+                            sub_packets: [
+                                Packet {
+                                    header: Header {
+                                        version: 5,
+                                        type_id: Literal,
+                                    },
+                                    value: 14,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 0,
+                                        type_id: Literal,
+                                    },
+                                    value: 15,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 0,
+                                        type_id: Literal,
+                                    },
+                                    value: 9,
+                                    sub_packets: [],
+                                },
+                            ],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 7,
+                                type_id: Sum,
+                            },
+                            value: 0,
+                            sub_packets: [
+                                Packet {
+                                    header: Header {
+                                        version: 0,
+                                        type_id: Literal,
+                                    },
+                                    value: 11,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 1,
+                                        type_id: Literal,
+                                    },
+                                    value: 5,
+                                    sub_packets: [],
+                                },
+                                Packet {
+                                    header: Header {
+                                        version: 7,
+                                        type_id: Literal,
+                                    },
+                                    value: 10,
+                                    sub_packets: [],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 0,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 0,
+                        type_id: GreaterThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 5,
+                                type_id: Literal,
+                            },
+                            value: 517089,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 5,
+                                type_id: Literal,
+                            },
+                            value: 4,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 255384586,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 0,
+                type_id: Sum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 5272,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 7,
+                        type_id: Literal,
+                    },
+                    value: 10353,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 7,
+                        type_id: Literal,
+                    },
+                    value: 14,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 1,
+                        type_id: Literal,
+                    },
+                    value: 652926481,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 4,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 1,
+                        type_id: Literal,
+                    },
+                    value: 173,
+                    sub_packets: [],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 0,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 0,
+                        type_id: Literal,
+                    },
+                    value: 4129201436,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 2,
+                        type_id: EqualTo,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 3,
+                                type_id: Literal,
+                            },
+                            value: 1099842,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 1,
+                                type_id: Literal,
+                            },
+                            value: 504558,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 5,
+                type_id: Product,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 5,
+                        type_id: Literal,
+                    },
+                    value: 208,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 1,
+                        type_id: GreaterThan,
+                    },
+                    value: 0,
+                    sub_packets: [
+                        Packet {
+                            header: Header {
+                                version: 1,
+                                type_id: Literal,
+                            },
+                            value: 149059958,
+                            sub_packets: [],
+                        },
+                        Packet {
+                            header: Header {
+                                version: 7,
+                                type_id: Literal,
+                            },
+                            value: 149059958,
+                            sub_packets: [],
+                        },
+                    ],
+                },
+            ],
+        },
+        Packet {
+            header: Header {
+                version: 3,
+                type_id: Sum,
+            },
+            value: 0,
+            sub_packets: [
+                Packet {
+                    header: Header {
+                        version: 6,
+                        type_id: Literal,
+                    },
+                    value: 3433,
+                    sub_packets: [],
+                },
+                Packet {
+                    header: Header {
+                        version: 4,
+                        type_id: Literal,
+                    },
+                    value: 10915953,
+                    sub_packets: [],
+                },
+            ],
+        },
+    ],
+}

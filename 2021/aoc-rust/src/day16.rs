@@ -1,19 +1,8 @@
-#![allow(unused)]
-
 use aoc_runner_derive::*;
-use flow_control::{break_if, return_if};
+use flow_control::return_if;
+
 type Input = Vec<u8>;
 type Output = usize;
-use std::collections::BTreeSet;
-
-// first 3 bits are the packet version -- number
-// next 3 bits encode the packet type ID -- number
-// // TypeId(4) == literal value
-// // // split into groups of 5 bits, starting with 1, except the last which starts with 0
-// // TypeId(ohter) == operator packet
-// // // bit after the header is the length type ID
-// // // // if 0, then the next 15 bits are a number that is the length of sub-packets in bits
-// // // // if 1, then the next 11 bits are a number that is the count of sub-packets in this packet
 
 const BINARY: [[u8; 4]; 16] = [
     [0, 0, 0, 0],
@@ -74,9 +63,9 @@ fn input_generator(raw_input: &str) -> Input {
         .collect()
 }
 
-// ====================================================
+// =====================================================================================
 // Types
-// ====================================================
+// =====================================================================================
 
 #[derive(Debug, Clone, Copy)]
 pub enum PacketType {
@@ -112,6 +101,12 @@ pub struct Header {
     type_id: PacketType,
 }
 
+impl Header {
+    fn new(version: usize, type_id: PacketType) -> Self {
+        Self { version, type_id }
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 pub enum LiteralSegment {
     Part(usize),
@@ -127,16 +122,18 @@ impl LiteralSegment {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
-pub struct LiteralPacket {
+#[derive(Debug, Clone)]
+struct Packet {
     header: Header,
     value: usize,
+    sub_packets: Vec<Packet>,
 }
 
-impl LiteralPacket {
-    fn new(header: Header, segments: Vec<LiteralSegment>) -> Self {
+impl Packet {
+    fn literal(header: Header, segments: Vec<LiteralSegment>) -> Self {
         Self {
             header,
+            sub_packets: Vec::new(),
             value: segments
                 .into_iter()
                 .rev()
@@ -146,217 +143,213 @@ impl LiteralPacket {
                 }),
         }
     }
-}
 
-#[derive(Debug, Clone)]
-struct OperatorPacket {
-    header: Header,
-    packets: Vec<Packet>,
-}
-
-#[derive(Debug, Clone)]
-enum Packet {
-    Literal(LiteralPacket),
-    Operator(OperatorPacket),
-}
-
-impl Packet {
-    fn version_sum(&self) -> usize {
-        match self {
-            Packet::Literal(packet) => packet.header.version,
-            Packet::Operator(packet) => {
-                packet.header.version
-                    + packet
-                        .packets
-                        .iter()
-                        .map(|packet| packet.version_sum())
-                        .sum::<usize>()
-            }
+    fn operator(header: Header, sub_packets: Vec<Packet>) -> Self {
+        Self {
+            header,
+            value: 0,
+            sub_packets,
         }
+    }
+
+    fn version_sum(&self) -> usize {
+        self.header.version
+            + self
+                .sub_packets
+                .iter()
+                .map(Packet::version_sum)
+                .sum::<usize>()
     }
 
     fn eval(&self) -> usize {
-        match self {
-            Packet::Literal(packet) => packet.value,
-            Packet::Operator(packet) => {
-                let mut packet_values = packet.packets.iter().map(Packet::eval);
-                match packet.header.type_id {
-                    PacketType::Sum => packet_values.sum(),
-                    PacketType::Product => packet_values.product(),
-                    PacketType::Minimum => packet_values.min().unwrap(),
-                    PacketType::Maximum => packet_values.max().unwrap(),
-                    PacketType::GreaterThan => {
-                        (packet_values.next().unwrap() > packet_values.next().unwrap()) as usize
-                    }
-                    PacketType::LessThan => {
-                        (packet_values.next().unwrap() < packet_values.next().unwrap()) as usize
-                    }
-                    PacketType::EqualTo => {
-                        (packet_values.next().unwrap() == packet_values.next().unwrap()) as usize
-                    }
-                    PacketType::Literal => panic!("at the disco!"),
-                }
+        let mut sub_packet_values = self.sub_packets.iter().map(Packet::eval);
+        match self.header.type_id {
+            PacketType::Sum => sub_packet_values.sum(),
+            PacketType::Product => sub_packet_values.product(),
+            PacketType::Minimum => sub_packet_values.min().unwrap(),
+            PacketType::Maximum => sub_packet_values.max().unwrap(),
+            PacketType::Literal => self.value,
+            PacketType::GreaterThan => {
+                (sub_packet_values.next().unwrap() > sub_packet_values.next().unwrap()) as usize
+            }
+            PacketType::LessThan => {
+                (sub_packet_values.next().unwrap() < sub_packet_values.next().unwrap()) as usize
+            }
+            PacketType::EqualTo => {
+                (sub_packet_values.next().unwrap() == sub_packet_values.next().unwrap()) as usize
             }
         }
     }
 }
 
-// ====================================================
-// Parse primitives
-// ====================================================
+// =====================================================================================
+// Parser combinator primitives
+// =====================================================================================
 
-type ParseResult<'a, T> = Option<(T, &'a [u8])>;
+type ParseOption<'a, T> = Option<(T, &'a [u8])>;
 
-fn empty_input(bits: &[u8]) -> bool {
-    bits.is_empty() || bits.iter().all(|&bit| bit == 0)
+trait MapFront<Front, Mapped> {
+    type Output;
+    fn map_front(self, f: impl Fn(Front) -> Mapped) -> Self::Output;
 }
 
-fn take(n: usize, bits: &[u8]) -> ParseResult<&[u8]> {
-    return_if!(bits.len() < n, None);
-    Some(bits.split_at(n))
+impl<Front, Mapped, Back> MapFront<Front, Mapped> for Option<(Front, Back)> {
+    type Output = Option<(Mapped, Back)>;
+    fn map_front(self, f: impl Fn(Front) -> Mapped) -> Self::Output {
+        self.map(|(front, back)| (f(front), back))
+    }
 }
 
-fn take_as_number(n: usize, bits: &[u8]) -> ParseResult<usize> {
-    take(n, bits).map(|(head, tail)| (number_from(head), tail))
+fn take(n: usize, bits: &[u8]) -> ParseOption<&[u8]> {
+    (n <= bits.len()).then(|| bits.split_at(n))
+}
+
+fn take_as_number(n: usize, bits: &[u8]) -> ParseOption<usize> {
+    take(n, bits).map_front(number_from)
 }
 
 fn require<T, PredicateFn, ParseFn>(
     predicate: PredicateFn,
     parse: ParseFn,
-    mut bits: &[u8],
-) -> ParseResult<T>
+    bits: &[u8],
+) -> ParseOption<T>
 where
     PredicateFn: Fn(&T) -> bool,
-    ParseFn: Fn(&[u8]) -> ParseResult<T>,
+    ParseFn: Fn(&[u8]) -> ParseOption<T>,
 {
-    parse(bits).filter(|(out, _)| predicate(out))
+    parse(bits).filter(|(parsed, _)| predicate(parsed))
 }
 
-fn parse_many<T, ParseFn>(n: usize, parse: ParseFn, mut bits: &[u8]) -> ParseResult<Vec<T>>
+fn parse_exactly<T, ParseFn>(n: usize, parse: ParseFn, mut bits: &[u8]) -> ParseOption<Vec<T>>
 where
-    ParseFn: Fn(&[u8]) -> ParseResult<T>,
+    ParseFn: Fn(&[u8]) -> ParseOption<T>,
 {
-    let mut result = Vec::new();
-    while let Some((out, tail)) = parse(bits) {
-        result.push(out);
-        return_if!(result.len() == n, Some((result, tail)));
+    let mut values = Vec::new();
+    while let Some((parsed, tail)) = parse(bits) {
         bits = tail;
+        values.push(parsed);
+        return_if!(values.len() == n, Some((values, bits)));
     }
     None
+}
+
+fn parse_one_or_more<T, ParseFn>(parse: ParseFn, mut bits: &[u8]) -> ParseOption<Vec<T>>
+where
+    ParseFn: Fn(&[u8]) -> ParseOption<T>,
+{
+    let mut values = Vec::new();
+    while let Some((parsed, tail)) = parse(bits) {
+        bits = tail;
+        values.push(parsed);
+    }
+    (!values.is_empty()).then(|| (values, bits))
 }
 
 fn parse_until<T, PredicateFn, ParseFn>(
     predicate: PredicateFn,
     parse: ParseFn,
     mut bits: &[u8],
-) -> ParseResult<Vec<T>>
+) -> ParseOption<Vec<T>>
 where
     PredicateFn: Fn(&T) -> bool,
-    ParseFn: Fn(&[u8]) -> ParseResult<T>,
+    ParseFn: Fn(&[u8]) -> ParseOption<T>,
 {
-    let mut result = Vec::new();
-    while let Some((out, tail)) = parse(bits) {
-        result.push(out);
-        return_if!(predicate(result.last().unwrap()), Some((result, tail)));
+    let mut values = Vec::new();
+    while let Some((parsed, tail)) = parse(bits) {
         bits = tail;
+        values.push(parsed);
+        return_if!(predicate(values.last().unwrap()), Some((values, bits)));
     }
     None
 }
 
-// ====================================================
-// Parse functions
-// ====================================================
+// =====================================================================================
+// Parsers for types
+// =====================================================================================
 
-fn parse_version(bits: &[u8]) -> ParseResult<usize> {
+fn parse_version(bits: &[u8]) -> ParseOption<usize> {
     take_as_number(3, bits)
 }
 
-fn parse_packet_type(bits: &[u8]) -> ParseResult<PacketType> {
-    take_as_number(3, bits).map(|(n, tail)| match n {
-        0 => (PacketType::Sum, tail),
-        1 => (PacketType::Product, tail),
-        2 => (PacketType::Minimum, tail),
-        3 => (PacketType::Maximum, tail),
-        4 => (PacketType::Literal, tail),
-        5 => (PacketType::GreaterThan, tail),
-        6 => (PacketType::LessThan, tail),
-        7 => (PacketType::EqualTo, tail),
+fn parse_packet_type(bits: &[u8]) -> ParseOption<PacketType> {
+    take_as_number(3, bits).map_front(|n| match n {
+        0 => PacketType::Sum,
+        1 => PacketType::Product,
+        2 => PacketType::Minimum,
+        3 => PacketType::Maximum,
+        4 => PacketType::Literal,
+        5 => PacketType::GreaterThan,
+        6 => PacketType::LessThan,
+        7 => PacketType::EqualTo,
         n => panic!("Unsupported packet type! {}", n),
     })
 }
 
-fn parse_header(bits: &[u8]) -> ParseResult<Header> {
-    parse_version(bits).and_then(|(version, tail)| {
-        parse_packet_type(tail).map(|(type_id, tail)| (Header { version, type_id }, tail))
+fn parse_header(bits: &[u8]) -> ParseOption<Header> {
+    parse_version(bits).and_then(|(version, bits)| {
+        parse_packet_type(bits).map_front(|type_id| Header::new(version, type_id))
     })
 }
 
-fn parse_packet_length(bits: &[u8]) -> ParseResult<PacketLength> {
-    take_as_number(1, bits).and_then(|(bit, tail)| match bit {
-        0 => take_as_number(15, tail).map(|(n, tail)| (PacketLength::Bits(n), tail)),
-        1 => take_as_number(11, tail).map(|(n, tail)| (PacketLength::Packets(n), tail)),
+fn parse_packet_length(bits: &[u8]) -> ParseOption<PacketLength> {
+    take_as_number(1, bits).and_then(|(bit, bits)| match bit {
+        0 => take_as_number(15, bits).map_front(PacketLength::Bits),
+        1 => take_as_number(11, bits).map_front(PacketLength::Packets),
         _ => None,
     })
 }
 
-fn parse_literal_segment(bits: &[u8]) -> ParseResult<LiteralSegment> {
-    take_as_number(1, bits).and_then(|(bit, tail)| match bit {
-        0 => take_as_number(4, tail).map(|(n, tail)| (LiteralSegment::End(n), tail)),
-        1 => take_as_number(4, tail).map(|(n, tail)| (LiteralSegment::Part(n), tail)),
+fn parse_literal_segment(bits: &[u8]) -> ParseOption<LiteralSegment> {
+    take_as_number(1, bits).and_then(|(bit, bits)| match bit {
+        0 => take_as_number(4, bits).map_front(LiteralSegment::End),
+        1 => take_as_number(4, bits).map_front(LiteralSegment::Part),
         _ => None,
     })
 }
 
-fn parse_packet(bits: &[u8]) -> ParseResult<Packet> {
+fn parse_packet(bits: &[u8]) -> ParseOption<Packet> {
     parse_literal_packet(bits).or_else(|| parse_operator_packet(bits))
 }
 
-fn parse_packets(mut bits: &[u8]) -> ParseResult<Vec<Packet>> {
-    let mut result = Vec::new();
-    while let Some((packet, tail)) = parse_packet(bits) {
-        result.push(packet);
-        return_if!(empty_input(tail), Some((result, tail)));
-        bits = tail;
-    }
-    None
-}
-
-fn parse_literal_packet(bits: &[u8]) -> ParseResult<Packet> {
-    require(|header| header.type_id.is_literal(), parse_header, bits).and_then(|(header, tail)| {
+fn parse_literal_packet(bits: &[u8]) -> ParseOption<Packet> {
+    require(|header| header.type_id.is_literal(), parse_header, bits).and_then(|(header, bits)| {
         parse_until(
             |segment| matches!(segment, LiteralSegment::End(_)),
             parse_literal_segment,
-            tail,
+            bits,
         )
-        .map(|(segments, tail)| (Packet::Literal(LiteralPacket::new(header, segments)), tail))
+        .map_front(|segments| Packet::literal(header, segments))
     })
 }
 
-fn parse_operator_packet(bits: &[u8]) -> ParseResult<Packet> {
-    require(|header| header.type_id.is_operator(), parse_header, bits).and_then(|(header, tail)| {
-        parse_packet_length(tail)
-            .and_then(|(length, tail)| match dbg!(length) {
-                PacketLength::Bits(n) => take(n, tail).and_then(|(head, tail)| {
-                    parse_packets(head).map(|(packets, _)| (packets, tail))
+fn parse_operator_packet(bits: &[u8]) -> ParseOption<Packet> {
+    require(|header| header.type_id.is_operator(), parse_header, bits).and_then(|(header, bits)| {
+        parse_packet_length(bits)
+            .and_then(|(length, bits)| match length {
+                PacketLength::Bits(n) => take(n, bits).and_then(|(sub_packet_bits, bits)| {
+                    parse_one_or_more(parse_packet, sub_packet_bits)
+                        .map(|(sub_packets, _)| (sub_packets, bits))
                 }),
-                PacketLength::Packets(n) => parse_many(n, parse_packet, tail),
+                PacketLength::Packets(n) => parse_exactly(n, parse_packet, bits),
             })
-            .map(|(packets, tail)| (Packet::Operator(OperatorPacket { header, packets }), tail))
+            .map_front(|sub_packets| Packet::operator(header, sub_packets))
     })
 }
 
-fn parse(bits: &[u8]) -> Option<Vec<Packet>> {
-    parse_packets(bits).map(|(packets, _)| packets)
+// =====================================================================================
+// Top-level parser
+// =====================================================================================
+
+fn parse(bits: &[u8]) -> Option<Packet> {
+    parse_packet(bits).map(|(packet, _)| packet)
 }
 
 #[aoc(day16, part1, nordzilla)]
 fn solve_part1(bits: &Input) -> Output {
-    let packets = parse(bits).unwrap();
-    packets.into_iter().map(|packet| packet.version_sum()).sum()
+    parse(bits).unwrap().version_sum()
 }
 
 #[aoc(day16, part2, nordzilla)]
 fn solve_part2(bits: &Input) -> Output {
-    let packets = parse(bits).unwrap();
-    packets.into_iter().map(|packet| packet.eval()).sum()
+    parse(bits).unwrap().eval()
 }
