@@ -2,6 +2,7 @@ use aoc_runner_derive::*;
 use flow_control::return_if;
 use itertools::Itertools;
 use std::fmt;
+use std::iter::Peekable;
 
 type Input = Vec<SfNumber>;
 type Output = i64;
@@ -1268,3 +1269,221 @@ fn part_2(input: &Vec<Number>) -> i64 {
         .max()
         .unwrap()
 }
+
+//=======================================================================
+// pmetzger
+//=======================================================================
+
+#[derive(Debug, Clone, PartialEq)]
+enum PMElt {
+    Open,
+    Int(usize),
+    Close,
+}
+
+type Num = Vec<PMElt>;
+
+type Data = Vec<Num>;
+
+#[allow(dead_code)]
+fn dump_num(num: &Num) {
+    for (i, elt) in num.iter().enumerate() {
+        match elt {
+            PMElt::Open => {print!("["); continue;},
+            PMElt::Close => print!("]"),
+            PMElt::Int(j) => print!("{}", j),
+        }
+        if let Some(t) = num.get(i+1) {
+            match t {
+                PMElt::Close => (),
+                PMElt::Open | PMElt::Int(_) => print!(","),
+            };
+        };
+    }
+    println!("");
+}
+
+#[allow(dead_code)]
+fn dump_data(d: &Data) {
+    for num in d {
+        dump_num(&num);
+    }
+}
+
+fn concat(a: &Num, b: &Num) -> Num {
+    let mut ret = Num::new();
+    ret.push(PMElt::Open);
+    ret.extend_from_slice(a);
+    ret.extend_from_slice(b);
+    ret.push(PMElt::Close);
+    ret
+}
+
+fn unwrap_usize(x: &PMElt) -> usize {
+    if let PMElt::Int(a) = x { *a } else { panic!("unexpected elt: {:?}", x) }
+}
+
+// Disgustibus non est disputandum.
+// ...and this is disgusting.
+fn do_explode(x: &mut Num, i: usize) {
+    let a = unwrap_usize(&x[i]);
+    let b = unwrap_usize(&x[i+1]);
+
+    // find something slightly more efficient?
+    x.remove(i+2);
+    x.remove(i+1);
+    x[i] = PMElt::Int(0);
+    x.remove(i-1);
+    // point at the correct spot
+    let loc = i - 1;
+    let mut i = loc - 1;
+    loop {
+        if i == 0 { break; }
+        if let PMElt::Int(n) = x[i] {
+            x[i] = PMElt::Int(n + a);
+            break;
+        }
+        i -= 1;
+    }
+    let mut i = loc + 1;
+    let len = x.len();
+    loop {
+        if i >= len { break; }
+        if let PMElt::Int(n) = x[i] {
+            x[i] = PMElt::Int(n + b);
+            break;
+        }
+        i += 1;
+    };
+}
+
+fn pmexplode(x: &mut Num) -> bool {
+    let len = x.len();
+    let mut level = 0;
+    for i in 0..len {
+        match x[i] {
+            PMElt::Open => level += 1,
+            PMElt::Close => level -= 1,
+            PMElt::Int(_) => {
+                if level == 5 {
+                    if let Some(PMElt::Int(_)) = x.get(i+1) {
+                        do_explode(x, i);
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+fn pmsplit(x: &mut Num) -> bool {
+    for i in 0..x.len() {
+        if let PMElt::Int(n) = x[i] {
+            if n > 9 {
+                let left = n / 2;
+                let right = n - left;
+                // truly disgusting.
+                x[i] = PMElt::Close;
+                x.insert(i, PMElt::Int(right));
+                x.insert(i, PMElt::Int(left));
+                x.insert(i, PMElt::Open);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+fn pmreduce(x: &Num) -> Num {
+    let mut x = x.clone();
+    loop {
+        if !pmexplode(&mut x) && !pmsplit(&mut x) {break;}
+    };
+    x
+}
+
+fn add(a: &Num, b: &Num) -> Num {
+    pmreduce(&concat(&a, &b))
+}
+
+fn magnitude_pair(iter: &mut Peekable<std::slice::Iter<PMElt>>) -> usize {
+    assert_eq!(*iter.next().unwrap(), PMElt::Open);
+    let peek: &PMElt = *iter.peek().unwrap();
+    let left =
+        match peek {
+            PMElt::Open => magnitude_pair(iter),
+            PMElt::Int(i) => {let _ = iter.next(); *i},
+            _ => panic!("unexpected elt: {:?}", peek),
+        };
+    let peek: &PMElt = *iter.peek().unwrap();
+    let right =
+        match peek {
+            PMElt::Open => magnitude_pair(iter),
+            PMElt::Int(i) => {let _ = iter.next(); *i},
+            _ => panic!("unexpected elt: {:?}", peek),
+        };
+    assert_eq!(*iter.next().unwrap(), PMElt::Close);
+    left * 3 + right * 2
+}
+
+
+fn pmmagnitude(x: &Num) -> usize {
+    magnitude_pair(&mut x.iter().peekable())
+}
+
+fn max_sum_all_distinct_pairs(data: &Data) -> usize {
+    let mut max: usize = 0;
+    let len = data.len();
+    for i in 0..len {
+        for j in 0..len {
+            if i != j {
+                let mag1 = pmmagnitude(&add(&data[i], &data[j]));
+                let mag2 = pmmagnitude(&add(&data[j], &data[i]));
+                let larger = if mag1 > mag2 { mag1 } else { mag2 };
+                max = if larger > max { larger } else { max };
+            }
+        }
+    }
+    max
+}
+
+#[aoc_generator(day18, part1, pmetzger)]
+#[aoc_generator(day18, part2, pmetzger)]
+fn parse_data(s: &str) -> Data {
+    s.lines().map(|s| parse_line(s)).collect()
+}
+
+#[aoc(day18, part1, pmetzger)]
+fn do_part1(data: &Data) -> usize {
+    let mut iter = data.iter().cloned();
+    let mut x = iter.next().unwrap();
+    for y in iter {
+        x = add(&x, &y);
+    };
+    pmmagnitude(&x)
+}
+
+#[aoc(day18, part2, pmetzger)]
+fn do_part2(data: &Data) -> usize {
+    max_sum_all_distinct_pairs(&data)
+}
+
+// utilities
+
+// parser
+
+fn parse_line(s: &str) -> Num {
+    let mut ret = Num::new();
+    for c in s.chars() {
+        match c {
+            '[' => ret.push(PMElt::Open),
+            '0'..='9' => ret.push(PMElt::Int(c.to_digit(10).unwrap() as usize)),
+            ']' => ret.push(PMElt::Close),
+            ',' => (),
+            _ => panic!("unexpected char: {:?}", c),
+        }
+    }
+    ret
+}
+
