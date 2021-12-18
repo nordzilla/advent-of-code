@@ -492,3 +492,231 @@ mod test {
         );
     }
 }
+
+//============================================================================
+// jimb
+//============================================================================
+
+use aoc_runner_derive::{aoc, aoc_generator};
+use anyhow::{anyhow, bail, Result};
+use std::ops::Range;
+use std::fmt::Write;
+use std::mem::swap;
+use std::str::FromStr;
+
+pub fn cartesian_product<A, B>(a: A, b: B) -> impl Iterator<Item = (A::Item, B::Item)> + Clone
+where
+    A: IntoIterator,
+    B: IntoIterator,
+    A::Item: Clone,
+    A::IntoIter: Clone,
+    B::IntoIter: Clone,
+{
+    let a = a.into_iter();
+    let b = b.into_iter();
+    a.flat_map(move |i| b.clone().map(move |j| (i.clone(), j)))
+}
+
+
+fn explode(num: &str, out: &mut String) -> bool {
+    out.clear();
+
+    let mut last_n: Option<Range<usize>> = None;
+    let mut depth = 0;
+    for (start, ch) in num.char_indices() {
+        match ch {
+            '[' => {
+                depth += 1;
+                if depth > 4 {
+                    let (left, right, pair_len) = get_num_pair(&num[start..]);
+                    if let Some(ref range) = last_n {
+                        let value = u64::from_str(&num[range.clone()]).unwrap();
+                        write!(out, "{}{}{}",
+                               &num[..range.start],
+                               value + left,
+                               &num[range.end..start])
+                            .unwrap();
+                    } else {
+                        out.push_str(&num[..start]);
+                    }
+                    out.push_str("0");
+                    match num[start + pair_len..].find(|ch: char| ch.is_digit(10)) {
+                        Some(right_start) => {
+                            let (n, right_len) = get_num(&num[start + pair_len + right_start..]);
+                            write!(out, "{}{}{}",
+                                   &num[start + pair_len .. start + pair_len + right_start],
+                                   right + n,
+                                   &num[start + pair_len + right_start + right_len..])
+                                .unwrap();
+                        }
+                        None => {
+                            out.push_str(&num[start + pair_len..]);
+                        }
+                    }
+
+                    return true;
+                }
+            },
+            ']' => depth -= 1,
+            '0'..='9' => {
+                match last_n {
+                    None => {
+                        last_n = Some(start .. start + 1);
+                    }
+                    Some(ref mut range) => {
+                        if range.end == start {
+                            range.end = start + 1;
+                        } else {
+                            last_n = Some(start .. start + 1);
+                        }
+                    }
+                }
+            }
+            ',' => {}
+            _ => panic!("unexpected character: {:?}", ch),
+        }
+    }
+
+    false
+}
+
+fn get_num_pair(s: &str) -> (u64, u64, usize) {
+    let bytes = s.as_bytes();
+    assert_eq!(bytes[0], b'[');
+    let mut pos = 1;
+    let mut left = 0;
+    while let Some(digit) = (bytes[pos] as char).to_digit(10) {
+        left = left * 10 + digit as u64;
+        pos += 1;
+    }
+    assert_eq!(bytes[pos], b',');
+    pos += 1;
+    let mut right = 0;
+    while let Some(digit) = (bytes[pos] as char).to_digit(10) {
+        right = right * 10 + digit as u64;
+        pos += 1;
+    }
+    assert_eq!(bytes[pos], b']');
+    (left, right, pos + 1)
+}
+
+fn get_num(s: &str) -> (u64, usize) {
+    let bytes = s.as_bytes();
+    let mut pos = 0;
+    let mut n = 0;
+    while let Some(digit) = (bytes[pos] as char).to_digit(10) {
+        n = n * 10 + digit as u64;
+        pos += 1;
+    }
+    (n, pos)
+}
+
+fn split(num: &str, out: &mut String) -> bool {
+    out.clear();
+
+    let mut rest = 0;
+    while let Some(pos) = num[rest..].find(|ch: char| ch.is_digit(10)) {
+        let (n, len) = get_num(&num[rest + pos..]);
+
+        if n >= 10 {
+            write!(out, "{}[{},{}]{}",
+                   &num[..rest + pos],
+                   n / 2,
+                   n - n / 2,
+                   &num[rest + pos + len..])
+                .unwrap();
+            return true;
+        }
+
+        rest += pos + len;
+    }
+
+    false
+}
+
+fn reduce(num: &mut String, temp: &mut String) {
+    loop {
+        if explode(num, temp) {
+            swap(num, temp);
+            continue;
+        }
+
+        if split(num, temp) {
+            swap(num, temp);
+            continue;
+        }
+
+        break;
+    }
+}
+
+fn magnitude(num: &str) -> u64 {
+    let mut stack = vec![];
+    let mut n = 0;
+    for ch in num.chars() {
+        match ch {
+            '0'..='9' => {
+                n = n * 10 + ch.to_digit(10).unwrap() as u64;
+            }
+            '[' => {},
+            ',' => {
+                stack.push(n);
+                n = 0;
+            },
+            ']' => {
+                let left = stack.pop().unwrap();
+                n = 3 * left + 2 * n;
+            }
+            _ => panic!("unexpected character {:?}", ch),
+        }
+    }
+    n
+}
+
+fn sum_list<'i, I, T>(list: I, out: &mut String, temp: &mut String)
+    where I: IntoIterator<Item = &'i T> + 'i,
+          T: AsRef<str> + 'i,
+          T: ?Sized,
+{
+    let mut list = list.into_iter();
+    let mut left = list.next().unwrap().as_ref();
+    for right in list {
+        temp.clear();
+        write!(temp, "[{},{}]", left, right.as_ref()).unwrap();
+        reduce(temp, out);
+        swap(temp, out);
+        left = &out;
+    }
+}
+
+#[aoc_generator(day18, part1, jimb_sed)]
+#[aoc_generator(day18, part2, jimb_sed)]
+fn generator(input: &str) -> Vec<String> {
+    input.lines().map(|s| s.to_owned()).collect()
+}
+
+#[aoc(day18, part1, jimb_sed)]
+fn part1(input: &Vec<String>) -> u64 {
+    let mut out = String::new();
+    let mut temp = String::new();
+    sum_list(input, &mut out, &mut temp);
+    magnitude(&out)
+
+}
+
+#[aoc(day18, part2, jimb_sed)]
+fn part2(input: &Vec<String>) -> u64 {
+    let mut sum = String::new();
+    let mut temp = String::new();
+
+    cartesian_product(0..input.len(), 0..input.len())
+        .filter(|(i, j)| i != j)
+        .map(|(i, j)| {
+            sum.clear();
+            write!(sum, "[{},{}]", &input[i], &input[j]).unwrap();
+            reduce(&mut sum, &mut temp);
+            magnitude(&sum)
+        })
+        .max()
+        .unwrap()
+}
