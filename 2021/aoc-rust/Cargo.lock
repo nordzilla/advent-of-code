@@ -85,9 +85,9 @@ checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 
 [[package]]
 name = "flow-control"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1c32e648ac4cb95befab7bd5611beedd6a9698b171080932f64c4eefaabf7eff"
+checksum = "a1a37dff0027a16466f0262058c5b69d4f5bf475bfaede2ccf442ca175ad0580"
 
 [[package]]
 name = "getrandom"
