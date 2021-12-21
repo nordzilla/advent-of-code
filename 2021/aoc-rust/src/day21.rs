@@ -1,4 +1,5 @@
 use aoc_runner_derive::*;
+use cached::proc_macro::cached;
 use flow_control::return_if;
 use text_io::scan;
 
@@ -114,7 +115,9 @@ fn multi_next([score1, score2, pos1, pos2, turn]: MultiState, value: usize) -> M
     }
 }
 
-fn multi_play(state @ [score1, score2, _, _, _]: MultiState) -> (usize, usize) {
+#[cached]
+fn multi_play(state: MultiState) -> (usize, usize) {
+    let [score1, score2, ..] = state;
     return_if!(score1 >= 21, (1, 0));
     return_if!(score2 >= 21, (0, 1));
     ROLLS
