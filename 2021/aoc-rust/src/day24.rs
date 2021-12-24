@@ -1,6 +1,8 @@
+use std::str::FromStr;
+
 use aoc_runner_derive::*;
 use flow_control::return_if;
-use text_io::scan;
+use rayon::prelude::*;
 
 type Input = Vec<Instruction>;
 type Output = i64;
@@ -14,6 +16,19 @@ enum Var {
     Lit(i64),
 }
 
+impl FromStr for Var {
+    type Err = <i64 as FromStr>::Err;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(match s {
+            "w" => Var::W,
+            "x" => Var::X,
+            "y" => Var::Y,
+            "z" => Var::Z,
+            n => Var::Lit(n.parse::<i64>()?),
+        })
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 enum Instruction {
     Inp(Var),
@@ -24,109 +39,29 @@ enum Instruction {
     Eql(Var, Var),
 }
 
+impl FromStr for Instruction {
+    type Err = <Var as FromStr>::Err;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(match &s[0..3] {
+            "inp" => Instruction::Inp((&s[4..5]).parse::<Var>()?),
+            "add" => Instruction::Add((&s[4..5]).parse::<Var>()?, (&s[6..]).parse::<Var>()?),
+            "mul" => Instruction::Mul((&s[4..5]).parse::<Var>()?, (&s[6..]).parse::<Var>()?),
+            "div" => Instruction::Div((&s[4..5]).parse::<Var>()?, (&s[6..]).parse::<Var>()?),
+            "mod" => Instruction::Mod((&s[4..5]).parse::<Var>()?, (&s[6..]).parse::<Var>()?),
+            "eql" => Instruction::Eql((&s[4..5]).parse::<Var>()?, (&s[6..]).parse::<Var>()?),
+            _ => panic!("at the disco!"),
+        })
+    }
+}
+
 #[aoc_generator(day24, part1, nordzilla)]
 #[aoc_generator(day24, part2, nordzilla)]
 fn input_generator(raw_input: &str) -> Input {
     raw_input
         .lines()
-        .map(|line| {
-            if line.starts_with("inp") {
-                let lhs: char;
-                scan!(line.bytes() => "inp {}", lhs);
-                let lhs = match lhs {
-                    'w' => Var::W,
-                    'x' => Var::X,
-                    'y' => Var::Y,
-                    'z' => Var::Z,
-                    _ => panic!("at the disco!"),
-                };
-                Instruction::Inp(lhs)
-            } else {
-                let lhs: char;
-                let rhs: String;
-                scan!(line[4..].bytes() => "{} {}", lhs, rhs);
-                let lhs = match lhs {
-                    'w' => Var::W,
-                    'x' => Var::X,
-                    'y' => Var::Y,
-                    'z' => Var::Z,
-                    _ => panic!("at the disco!"),
-                };
-                let rhs = match rhs.as_str() {
-                    "w" => Var::W,
-                    "x" => Var::X,
-                    "y" => Var::Y,
-                    "z" => Var::Z,
-                    n => Var::Lit(n.parse::<i64>().unwrap()),
-                };
-                match &line[0..3] {
-                    "add" => Instruction::Add(lhs, rhs),
-                    "mul" => Instruction::Mul(lhs, rhs),
-                    "div" => Instruction::Div(lhs, rhs),
-                    "mod" => Instruction::Mod(lhs, rhs),
-                    "eql" => Instruction::Eql(lhs, rhs),
-                    _ => panic!("at the disco!"),
-                }
-            }
-        })
+        .flat_map(Instruction::from_str)
+        .filter(|instruction| !matches!(instruction, Instruction::Div(_, Var::Lit(1))))
         .collect()
-}
-
-/// Returns the count of digits in a number, or 0 if the number itself is 0.
-fn digit_count(n: i64) -> u32 {
-    return_if!(n == 0, 0);
-    1 + (n as f64).log10() as u32
-}
-
-/// Returns an iterator over the digits of a number from highest place value to lowest place value.
-fn digits_iter(n: i64) -> impl Iterator<Item = i64> {
-    (0..digit_count(n))
-        .rev()
-        .map(move |exp| n / 10_i64.pow(exp) % 10)
-}
-
-/// Retuns an iterator of integers that do not contain 0s, from 11111111111111 to 99999999999999
-fn increasing_segment_candidates(digits: u32) -> impl Iterator<Item = i64> {
-    std::iter::successors(Some(11111111111111 % 10_i64.pow(digits)), move |n| {
-        return_if!(n + 1 > 99999999999999 % 10_i64.pow(digits), None);
-        Some(
-            n + 1
-                + (1..=digits)
-                    .map(|place_value| {
-                        if (n + 1) % 10_i64.pow(place_value) < 10_i64.pow(place_value - 1) {
-                            10_i64.pow(place_value - 1)
-                        } else {
-                            0
-                        }
-                    })
-                    .sum::<i64>(),
-        )
-    })
-}
-
-/// Retuns an iterator of integers that do not contain 0s, from 99999999999999 to 11111111111111
-fn decreasing_segment_candidates(digits: u32) -> impl Iterator<Item = i64> {
-    std::iter::successors(Some(99999999999999 % 10_i64.pow(digits)), move |n| {
-        return_if!(n - 1 < 11111111111111 % 10_i64.pow(digits), None);
-        Some(
-            n - 1
-                - (1..=digits)
-                    .map(|place_value| {
-                        if (n - 1) % 10_i64.pow(place_value) < 10_i64.pow(place_value - 1) {
-                            10_i64.pow(place_value - 1)
-                        } else {
-                            0
-                        }
-                    })
-                    .sum::<i64>(),
-        )
-    })
-}
-
-/// Returns the concatenation of number with segment.
-/// e.g. concat_segment(123, 456) == 123456
-fn concat_segment(number: i64, segment: i64) -> i64 {
-    number * 10_i64.pow(digit_count(segment)) + segment
 }
 
 #[derive(Debug, Default, Clone, Copy)]
@@ -135,17 +70,18 @@ struct Monad<'a> {
     x: i64,
     y: i64,
     z: i64,
+    counter: usize,
     instructions: &'a [Instruction],
 }
 
+//====================================================================================
+// ALU operations
+//====================================================================================
 impl<'a> Monad<'a> {
     fn new(instructions: &'a [Instruction]) -> Self {
         Self {
-            w: 0,
-            x: 0,
-            y: 0,
-            z: 0,
             instructions,
+            ..Self::default()
         }
     }
 
@@ -182,118 +118,183 @@ impl<'a> Monad<'a> {
             Instruction::Inp(v) => Monad::inp(self.var(v)?, digits)?,
             Instruction::Add(lhs, rhs) => *self.var(lhs)? += self.value(rhs),
             Instruction::Mul(lhs, rhs) => *self.var(lhs)? *= self.value(rhs),
-            Instruction::Div(lhs, rhs) => {
-                return_if!(self.value(rhs) == 0, None);
-                *self.var(lhs)? /= self.value(rhs)
-            }
-            Instruction::Mod(lhs, rhs) => {
-                return_if!(self.value(lhs) < 0, None);
-                return_if!(self.value(rhs) <= 0, None);
-                *self.var(lhs)? %= self.value(rhs)
-            }
+            Instruction::Div(lhs, rhs) => *self.var(lhs)? /= self.value(rhs),
+            Instruction::Mod(lhs, rhs) => *self.var(lhs)? %= self.value(rhs),
             Instruction::Eql(lhs, rhs) => {
                 *self.var(lhs)? = (self.value(lhs) == self.value(rhs)) as i64
             }
         }
         Some(())
     }
+}
 
-    fn validate_candidate(mut self, candidate: i64, critical_instruction: usize) -> Option<i64> {
-        let mut digits = digits_iter(candidate);
-        for &instruction in self.instructions.iter().take(critical_instruction + 1) {
-            self.eval(instruction, &mut digits)?;
-        }
-        (self.x == 0).then(|| candidate)
-    }
+//====================================================================================
+// Numeric manipulation helper functions
+//====================================================================================
 
-    /// A critical section is an instruction where we need the x-register to be 0.
-    /// Returns (digit, instruction) where digit is the digit number being evaluated
-    /// during the critical section, and instruction is the nth that should
-    /// leave the x-register with 0.
-    fn find_critical_sections(self) -> Vec<(u32, usize)> {
+/// Returns the count of digits in a number, or 0 if the number itself is 0.
+fn digit_count(n: i64) -> u32 {
+    return_if!(n == 0, 0);
+    1 + (n as f64).log10() as u32
+}
+
+/// Returns an iterator over the digits of a number from highest place value to lowest place value.
+fn digits_iter(n: i64) -> impl Iterator<Item = i64> {
+    (0..digit_count(n))
+        .rev()
+        .map(move |exp| n / 10_i64.pow(exp) % 10)
+}
+
+/// Retuns a parallel iterator of all numbers with the specified number of `digits` that do not contain 0
+/// in any digit. The numbers will start with all 1's and end with all 9's, for the given digit length.
+fn increasing_segment_candidates(digits: u32) -> impl ParallelIterator<Item = i64> {
+    std::iter::successors(Some(11111111111111 % 10_i64.pow(digits)), move |n| {
+        return_if!(n + 1 > 99999999999999 % 10_i64.pow(digits), None);
+        Some(
+            n + 1
+                + (1..=digits)
+                    .map(|place_value| {
+                        if (n + 1) % 10_i64.pow(place_value) < 10_i64.pow(place_value - 1) {
+                            10_i64.pow(place_value - 1)
+                        } else {
+                            0
+                        }
+                    })
+                    .sum::<i64>(),
+        )
+    })
+    .collect::<Vec<_>>()
+    .into_par_iter()
+}
+
+/// Retuns a parallel iterator of all numbers with the specified number of `digits` that do not contain 0
+/// in any digit. The numbers will start with all 9's and end with all 1's, for the given digit length.
+fn decreasing_segment_candidates(digits: u32) -> impl ParallelIterator<Item = i64> {
+    std::iter::successors(Some(99999999999999 % 10_i64.pow(digits)), move |n| {
+        return_if!(n - 1 < 11111111111111 % 10_i64.pow(digits), None);
+        Some(
+            n - 1
+                - (1..=digits)
+                    .map(|place_value| {
+                        if (n - 1) % 10_i64.pow(place_value) < 10_i64.pow(place_value - 1) {
+                            10_i64.pow(place_value - 1)
+                        } else {
+                            0
+                        }
+                    })
+                    .sum::<i64>(),
+        )
+    })
+    .collect::<Vec<_>>()
+    .into_par_iter()
+}
+
+/// Returns the concatenation of two numbers.
+/// e.g. concat_segments(123, 456) == 123456
+fn concat_segments(lhs: i64, rhs: i64) -> i64 {
+    lhs * 10_i64.pow(digit_count(rhs)) + rhs
+}
+
+//====================================================================================
+// Depth-first search for a valid number
+//====================================================================================
+impl<'a> Monad<'a> {
+    /// A critical instruction is an instruction where we need the x-register to be 0.
+    /// The critical instruction is `eql x 0`, but only when it follows `div z 26`.
+    ///
+    /// The critical instruction is always three instructions after `div z 26`.
+    ///
+    /// A number will only be valid if the x-register is zero after every critical instruction.
+    fn find_critical_instructions(self) -> Vec<usize> {
         self.instructions
             .iter()
-            .zip(3..)
+            .zip(4..)
             .filter(|(instruction, _)| {
                 matches!(instruction, Instruction::Div(Var::Z, Var::Lit(26)))
             })
-            .map(|(_, n)| (n / 18 + 1, n as usize))
+            .map(|(_, n)| n)
+            .chain(std::iter::once(self.instructions.len()))
             .collect()
     }
 
-    fn increasing_valid_segment_candidates(
-        self,
-        partial_solution: i64,
-        (critical_digit, critical_instruction): (u32, usize),
-    ) -> impl Iterator<Item = i64> + 'a {
-        increasing_segment_candidates(critical_digit - digit_count(partial_solution))
-            .into_iter()
-            .filter(move |&segment_candidate| {
-                let solution_candidate = concat_segment(partial_solution, segment_candidate);
-                self.validate_candidate(solution_candidate, critical_instruction)
-                    .is_some()
-            })
+    /// A solution segment is valid only if the x-register is zero after evaluating
+    /// the critical instruction with regard to this segment.
+    ///
+    /// Returns the segment along with the Monad itself, whose register values and
+    /// instruction counter are saved to the spot after evaluating the critical
+    /// instruction for the segment.
+    fn validate_solution_segment(
+        mut self,
+        segment_candidate: i64,
+        critical_instruction: usize,
+    ) -> Option<(Self, i64)> {
+        let mut digits = digits_iter(segment_candidate);
+        for &instruction in self
+            .instructions
+            .iter()
+            .skip(self.counter)
+            .take(critical_instruction - self.counter)
+        {
+            self.eval(instruction, &mut digits)?;
+        }
+        self.counter += critical_instruction - self.counter;
+        (self.x == 0).then(|| (self, segment_candidate))
     }
 
-    fn decreasing_valid_segment_candidates(
+    /// Return all segments that pass the test at their critical instruction.
+    fn valid_segment_candidates<Iter: ParallelIterator<Item = i64> + 'static>(
         self,
-        partial_solution: i64,
-        (critical_digit, critical_instruction): (u32, usize),
-    ) -> impl Iterator<Item = i64> + 'a {
-        decreasing_segment_candidates(critical_digit - digit_count(partial_solution))
-            .into_iter()
-            .filter(move |&segment_candidate| {
-                let solution_candidate = concat_segment(partial_solution, segment_candidate);
-                self.validate_candidate(solution_candidate, critical_instruction)
-                    .is_some()
-            })
+        generate_candidates: fn(u32) -> Iter,
+        critical_instruction: usize,
+    ) -> impl ParallelIterator<Item = (Monad<'a>, i64)> + 'a {
+        let digit_count = if self.counter == 0 {
+            1 + critical_instruction / 18
+        } else {
+            critical_instruction / 18 - self.counter / 18
+        } as u32;
+        generate_candidates(digit_count).filter_map(move |segment_candidate| {
+            self.validate_solution_segment(segment_candidate, critical_instruction)
+        })
     }
 
-    fn find_smallest_valid_number(
+    /// Recursive helper to find the first valid number.
+    fn find_first_valid_number<Iter: ParallelIterator<Item = i64> + 'static>(
         self,
-        solution: i64,
-        critical_sections: &[(u32, usize)],
+        previous_segment: i64,
+        generate_candidates: fn(u32) -> Iter,
+        critical_instructions: &[usize],
     ) -> Option<i64> {
-        return_if!(critical_sections.is_empty(), Some(solution));
-        self.increasing_valid_segment_candidates(solution, critical_sections[0])
-            .find_map(|segment_candidate| {
-                self.find_smallest_valid_number(
-                    concat_segment(solution, segment_candidate),
-                    &critical_sections[1..],
-                )
+        return_if!(critical_instructions.is_empty(), Some(0));
+        self.valid_segment_candidates(generate_candidates, critical_instructions[0])
+            .find_map_first(|(monad, segment_candidate)| {
+                monad
+                    .find_first_valid_number(
+                        segment_candidate,
+                        generate_candidates,
+                        &critical_instructions[1..],
+                    )
+                    .map(|next_segment| concat_segments(previous_segment, next_segment))
             })
     }
 
-    fn find_largest_valid_number(
+    fn first_valid_number<Iter: ParallelIterator<Item = i64> + 'static>(
         self,
-        solution: i64,
-        critical_sections: &[(u32, usize)],
+        generate_candidates: fn(u32) -> Iter,
     ) -> Option<i64> {
-        return_if!(critical_sections.is_empty(), Some(solution));
-        self.decreasing_valid_segment_candidates(solution, critical_sections[0])
-            .find_map(|segment_candidate| {
-                self.find_largest_valid_number(
-                    concat_segment(solution, segment_candidate),
-                    &critical_sections[1..],
-                )
-            })
-    }
-
-    fn smallest_valid_number(self) -> Option<i64> {
-        self.find_smallest_valid_number(0, &self.find_critical_sections())
-    }
-
-    fn largest_valid_number(self) -> Option<i64> {
-        self.find_largest_valid_number(0, &self.find_critical_sections())
+        self.find_first_valid_number(0, generate_candidates, &self.find_critical_instructions())
     }
 }
 
 #[aoc(day24, part1, nordzilla)]
 fn solve_part1(instructions: &Input) -> Output {
-    Monad::new(instructions).largest_valid_number().unwrap()
+    Monad::new(instructions)
+        .first_valid_number(decreasing_segment_candidates)
+        .unwrap()
 }
 
 #[aoc(day24, part2, nordzilla)]
 fn solve_part2(instructions: &Input) -> Output {
-    Monad::new(instructions).smallest_valid_number().unwrap()
+    Monad::new(instructions)
+        .first_valid_number(increasing_segment_candidates)
+        .unwrap()
 }
